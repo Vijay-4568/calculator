@@ -1,0 +1,55 @@
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const display = document.querySelector(".display");
+            let currentInput = "";
+
+            function updateDisplay() {
+                display.textContent = currentInput.slice(-15); // Limit displayed input to 15 characters
+            }
+
+            function appendToDisplay(value) {
+                if (currentInput.length === 0 && value !== "0") {
+                    // Clear the display and append the new input if it's not "0"
+                    currentInput = value;
+                    updateDisplay();
+                } else if (currentInput.length < 15) {
+                    currentInput += value;
+                    updateDisplay();
+                }
+            }
+
+            function calculateResult() {
+                try {
+                    const result = eval(currentInput);
+                    currentInput = String(result);
+                    updateDisplay();
+                } catch (error) {
+                    currentInput = "Error";
+                    updateDisplay();
+                }
+            }
+
+            function clearDisplay() {
+                currentInput = ""; // Display "0" when Clear is clicked
+                updateDisplay();
+            }
+
+            // Add click event listeners to calculator buttons
+            const buttons = document.querySelectorAll(".buttons button");
+            buttons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    const buttonValue = button.value;
+                    if (buttonValue === "=") {
+                        calculateResult();
+                    } else if (buttonValue === "clear") {
+                        clearDisplay();
+                    } else if (buttonValue === "backspace") {
+                        currentInput = currentInput.slice(0, -1);
+                        updateDisplay();
+                    } else {
+                        appendToDisplay(buttonValue);
+                    }
+                });
+            });
+        });
+    
